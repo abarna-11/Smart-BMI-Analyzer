@@ -3,94 +3,120 @@ const clearBtn = document.getElementById('clearBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const toggleBtn = document.getElementById('toggleMode');
 
+const gainBtn = document.getElementById('gainBtn');
+const loseBtn = document.getElementById('loseBtn');
+const goalSection = document.getElementById('goalSection');
+
+const tabs = document.getElementById('categoryTabs');
+const tipsBox = document.getElementById('tipsBox');
+
+const dietBtn = document.getElementById('dietBtn');
+const workoutBtn = document.getElementById('workoutBtn');
+const extraOutput = document.getElementById('extraOutput');
+const extraSection = document.getElementById('extraSection');
+
 let chart;
+let tipsData = {};
+let extraData = {};
+let currentGoal = "";
 
-// Dark Mode Toggle
-toggleBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark');
-});
+// Load JSON
+fetch('tips.json').then(res => res.json()).then(data => tipsData = data);
+fetch('dietWorkout.json').then(res => res.json()).then(data => extraData = data);
 
-// Calculate
-calculateBtn.addEventListener('click', () => {
-  const weight = parseFloat(document.getElementById('weight').value);
-  const height = parseFloat(document.getElementById('height').value);
-  const resultDiv = document.getElementById('bmiResult');
+// Dark mode
+toggleBtn.onclick = () => document.body.classList.toggle('dark');
 
-  if (!weight || !height) {
-    resultDiv.innerText = "⚠️ Enter values";
-    return;
-  }
+// BMI
+calculateBtn.onclick = () => {
+  const weight = document.getElementById('weight').value;
+  const height = document.getElementById('height').value;
 
-  const bmi = (weight / ((height/100) ** 2)).toFixed(2);
+  const bmi = (weight / ((height/100)**2)).toFixed(2);
 
-  let category = "", suggestion = "";
+  document.getElementById('bmiResult').innerHTML =
+    `<strong>BMI:</strong> ${bmi}`;
 
-  if (bmi < 18.5) {
-    category = "Underweight";
-    suggestion = "Eat more nutritious food.";
-  } else if (bmi < 25) {
-    category = "Normal";
-    suggestion = "Keep your lifestyle balanced.";
-  } else if (bmi < 30) {
-    category = "Overweight";
-    suggestion = "Exercise regularly.";
-  } else {
-    category = "Obese";
-    suggestion = "Consult a health expert.";
-  }
+  goalSection.style.display = "flex";
 
-  resultDiv.innerHTML = `
-    <strong>BMI:</strong> ${bmi} (${category})<br>
-    🧠 ${suggestion}
-  `;
+  document.getElementById("meterFill").style.width =
+    Math.min((bmi/40)*100,100)+"%";
 
-  // Meter animation
-  const meter = document.getElementById("meterFill");
-  meter.style.width = "0%";
-  setTimeout(() => {
-    meter.style.width = Math.min((bmi / 40) * 100, 100) + "%";
-  }, 200);
-
-  // Graph
   const ctx = document.getElementById('bmiChart').getContext('2d');
   if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
-      datasets: [{
-        data: [
-          bmi < 18.5 ? bmi : 0,
-          (bmi >= 18.5 && bmi < 25) ? bmi : 0,
-          (bmi >= 25 && bmi < 30) ? bmi : 0,
-          bmi >= 30 ? bmi : 0
+    type:'bar',
+    data:{
+      labels:['Underweight','Normal','Overweight','Obese'],
+      datasets:[{
+        data:[
+          bmi<18.5?bmi:0,
+          bmi>=18.5&&bmi<25?bmi:0,
+          bmi>=25&&bmi<30?bmi:0,
+          bmi>=30?bmi:0
         ]
       }]
     },
-    options: {
-      plugins: { legend: { display: false } }
-    }
+    options:{plugins:{legend:{display:false}}}
   });
+};
+
+// Goal
+gainBtn.onclick=()=>selectGoal('gain');
+loseBtn.onclick=()=>selectGoal('lose');
+
+function selectGoal(goal){
+  currentGoal=goal;
+  tabs.style.display="flex";
+  extraSection.style.display="flex";
+}
+
+// Tabs
+document.querySelectorAll('#categoryTabs button').forEach(btn=>{
+  btn.onclick=()=>{
+    let data=tipsData[currentGoal][btn.dataset.type];
+    let html="<ul>";
+    data.forEach(t=>html+=`<li>${t}</li>`);
+    html+="</ul>";
+    tipsBox.innerHTML=html;
+  }
 });
+
+// Diet
+dietBtn.onclick=()=>{
+  let d=extraData[currentGoal].diet;
+  let html="";
+  for(let m in d){
+    html+=`<strong>${m}</strong><ul>`;
+    d[m].forEach(i=>html+=`<li>${i}</li>`);
+    html+="</ul>";
+  }
+  extraOutput.innerHTML=html;
+};
+
+// Workout
+workoutBtn.onclick=()=>{
+  let w=extraData[currentGoal].workout;
+  let html="<ul>";
+  for(let d in w){
+    html+=`<li>${d}: ${w[d]}</li>`;
+  }
+  html+="</ul>";
+  extraOutput.innerHTML=html;
+};
 
 // Clear
-clearBtn.addEventListener('click', () => {
-  document.getElementById('weight').value = '';
-  document.getElementById('height').value = '';
-  document.getElementById('bmiResult').innerHTML = '';
-  document.getElementById('meterFill').style.width = "0%";
-  if (chart) chart.destroy();
-});
+clearBtn.onclick=()=>{
+  location.reload();
+};
 
 // Download
-downloadBtn.addEventListener('click', () => {
-  const text = document.getElementById('bmiResult').innerText;
-  if (!text) return alert("Calculate first");
-
-  const blob = new Blob([text], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.download = 'BMI_Result.txt';
-  link.href = URL.createObjectURL(blob);
+downloadBtn.onclick=()=>{
+  let text=document.getElementById('bmiResult').innerText;
+  let blob=new Blob([text]);
+  let link=document.createElement('a');
+  link.download='bmi.txt';
+  link.href=URL.createObjectURL(blob);
   link.click();
-});
+};
