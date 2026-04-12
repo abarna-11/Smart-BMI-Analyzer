@@ -4,22 +4,17 @@
   <meta charset="UTF-8">
   <title>Smart BMI Analyzer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- 🔝 TOP BAR -->
 <div class="top-bar">
   <h2>🧍 Smart BMI Analyzer</h2>
   <button id="toggleMode">🌙</button>
 </div>
 
-<!-- 🧠 MAIN CARD -->
 <div class="tool-wrapper">
 
-  <!-- INPUTS -->
   <div class="converter-grid">
     <input type="number" id="weight" placeholder="Weight (kg)">
     <input type="number" id="height" placeholder="Height (cm)">
@@ -29,42 +24,33 @@
     <button id="downloadBtn">📥 Download</button>
   </div>
 
-  <!-- RESULT -->
   <div id="bmiResult" class="output-box"></div>
 
-  <!-- BMI METER -->
-  <div class="meter">
-    <div id="meterFill"></div>
-  </div>
+  <div class="meter"><div id="meterFill"></div></div>
 
-  <!-- GRAPH -->
   <canvas id="bmiChart"></canvas>
 
-  <!-- 🎯 GOAL SELECTION -->
-  <div id="goalSection" class="goal-section" style="display:none;">
+  <div id="goalSection" class="goal-section">
     <button id="gainBtn">💪 Gain Weight</button>
     <button id="loseBtn">🔥 Lose Weight</button>
   </div>
 
-  <!-- 📂 CATEGORY TABS -->
-  <div id="categoryTabs" class="tabs" style="display:none;">
-    <button data-type="diet">🍗 Diet Tips</button>
-    <button data-type="workout">🏋️ Workout Tips</button>
-    <button data-type="lifestyle">😴 Lifestyle Tips</button>
+  <div id="categoryTabs" class="tabs">
+    <button data-type="diet">🍗 Diet</button>
+    <button data-type="workout">🏋️ Workout</button>
+    <button data-type="lifestyle">😴 Lifestyle</button>
   </div>
 
-  <!-- 💡 TIPS OUTPUT -->
   <div id="tipsBox" class="tips-box"></div>
 
-  <!-- ⚡ EXTRA FEATURES -->
-  <div class="extra-section" id="extraSection" style="display:none;">
+  <div class="extra-section">
     <button id="dietBtn">🍽 Diet Plan</button>
     <button id="workoutBtn">🏋️ Workout Plan</button>
   </div>
 
 </div>
 
-<!-- 🪟 MODAL POPUP -->
+<!-- Modal -->
 <div id="modal" class="modal">
   <div class="modal-content">
     <span id="closeModal">&times;</span>
@@ -72,10 +58,7 @@
   </div>
 </div>
 
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- JS -->
 <script src="script.js"></script>
 
 </body>
