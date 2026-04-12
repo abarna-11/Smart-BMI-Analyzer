@@ -1,105 +1,167 @@
-// Buttons
-const calculateBtn = document.getElementById('calculateBtn');
-const clearBtn = document.getElementById('clearBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const toggleBtn = document.getElementById('toggleMode');
+// 🔥 Elements
+const $ = id => document.getElementById(id);
 
-const gainBtn = document.getElementById('gainBtn');
-const loseBtn = document.getElementById('loseBtn');
+const calculateBtn = $('calculateBtn');
+const clearBtn = $('clearBtn');
+const downloadBtn = $('downloadBtn');
+const toggleBtn = $('toggleMode');
 
-const tabs = document.getElementById('categoryTabs');
-const tipsBox = document.getElementById('tipsBox');
+const gainBtn = $('gainBtn');
+const loseBtn = $('loseBtn');
 
-const dietBtn = document.getElementById('dietBtn');
-const workoutBtn = document.getElementById('workoutBtn');
+const tabs = $('categoryTabs');
+const tipsBox = $('tipsBox');
 
-// Modal
-const modal = document.getElementById('modal');
-const modalBody = document.getElementById('modalBody');
-const closeModal = document.getElementById('closeModal');
+const dietBtn = $('dietBtn');
+const workoutBtn = $('workoutBtn');
 
-// Data
+const modal = $('modal');
+const modalBody = $('modalBody');
+const closeModal = $('closeModal');
+
+// 📊 State
 let chart;
 let tipsData = {};
 let extraData = {};
 let currentGoal = "";
 
-// Load JSON
-fetch('tips.json').then(res => res.json()).then(data => tipsData = data);
-fetch('dietWorkout.json').then(res => res.json()).then(data => extraData = data);
+// 📦 Load JSON
+async function loadData() {
+  try {
+    const tipsRes = await fetch('tips.json');
+    tipsData = await tipsRes.json();
 
-// 🌙 Dark mode
+    const extraRes = await fetch('dietWorkout.json');
+    extraData = await extraRes.json();
+  } catch (err) {
+    console.error("JSON Load Error:", err);
+  }
+}
+loadData();
+
+// 🌙 Dark Mode
 toggleBtn.onclick = () => {
   document.body.classList.toggle('dark');
+  toggleBtn.innerText = document.body.classList.contains('dark') ? "☀️" : "🌙";
 };
 
-// 📊 Calculate BMI
+// 📊 BMI Calculation
 calculateBtn.onclick = () => {
-  const weight = parseFloat(document.getElementById('weight').value);
-  const height = parseFloat(document.getElementById('height').value);
-  const resultDiv = document.getElementById('bmiResult');
+  const weight = parseFloat($('weight').value);
+  const height = parseFloat($('height').value);
+  const resultDiv = $('bmiResult');
 
   if (!weight || !height) {
-    resultDiv.innerText = "⚠️ Please enter weight and height.";
+    showError("⚠️ Enter valid weight & height");
     return;
   }
 
   const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+  const category = getCategory(bmi);
 
-  let category = "";
-  if (bmi < 18.5) category = "Underweight";
-  else if (bmi < 25) category = "Normal";
-  else if (bmi < 30) category = "Overweight";
-  else category = "Obese";
-
-  resultDiv.innerHTML = `<strong>BMI:</strong> ${bmi} (${category})`;
+  // 🎯 Result UI
+  resultDiv.innerHTML = `
+    <h2>${bmi}</h2>
+    <p>${category}</p>
+    <small>${getMessage(category)}</small>
+  `;
 
   // Show sections
-  document.getElementById('goalSection').style.display = "flex";
+  $('goalSection').style.display = "block";
   tabs.style.display = "none";
   tipsBox.innerHTML = "";
 
-  // Meter animation
-  const meter = document.getElementById("meterFill");
+  animateMeter(bmi);
+  renderChart(bmi);
+};
+
+// 📊 Category
+function getCategory(bmi) {
+  if (bmi < 18.5) return "Underweight";
+  if (bmi < 25) return "Normal";
+  if (bmi < 30) return "Overweight";
+  return "Obese";
+}
+
+// 💬 Smart Message
+function getMessage(category) {
+  const messages = {
+    Underweight: "You need more nutrition 💪",
+    Normal: "Perfect! Maintain your lifestyle 👌",
+    Overweight: "Time to get active 🔥",
+    Obese: "Focus on health seriously ❤️"
+  };
+  return messages[category];
+}
+
+// 🚨 Error
+function showError(msg) {
+  const resultDiv = $('bmiResult');
+  resultDiv.innerHTML = `<p style="color:#ef4444">${msg}</p>`;
+}
+
+// 📈 Meter Animation
+function animateMeter(bmi) {
+  const meter = $('meterFill');
   meter.style.width = "0%";
+
   setTimeout(() => {
     meter.style.width = Math.min((bmi / 40) * 100, 100) + "%";
   }, 200);
+}
 
-  // Graph
-  const ctx = document.getElementById('bmiChart').getContext('2d');
+// 📊 Chart
+function renderChart(bmi) {
+  const ctx = $('bmiChart').getContext('2d');
   if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
+      labels: ['Under', 'Normal', 'Over', 'Obese'],
       datasets: [{
         data: [
           bmi < 18.5 ? bmi : 0,
           (bmi >= 18.5 && bmi < 25) ? bmi : 0,
           (bmi >= 25 && bmi < 30) ? bmi : 0,
           bmi >= 30 ? bmi : 0
-        ]
+        ],
+        borderRadius: 10
       }]
     },
     options: {
-      plugins: { legend: { display: false } }
+      animation: {
+        duration: 1000
+      },
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          display: false
+        }
+      }
     }
   });
-};
+}
 
-// 🎯 Select Goal
+// 🎯 Goal Selection
 gainBtn.onclick = () => selectGoal('gain');
 loseBtn.onclick = () => selectGoal('lose');
 
 function selectGoal(goal) {
   currentGoal = goal;
+
   tabs.style.display = "flex";
   tipsBox.innerHTML = "👉 Select a category";
+
+  // Highlight active button
+  gainBtn.classList.remove('active');
+  loseBtn.classList.remove('active');
+  goal === 'gain' ? gainBtn.classList.add('active') : loseBtn.classList.add('active');
 }
 
-// 📂 Tabs (Diet / Workout / Lifestyle tips)
+// 📂 Tabs
 document.querySelectorAll('#categoryTabs button').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('#categoryTabs button').forEach(b => b.classList.remove('active'));
@@ -107,50 +169,58 @@ document.querySelectorAll('#categoryTabs button').forEach(btn => {
 
     const type = btn.dataset.type;
 
-    if (!tipsData[currentGoal] || !tipsData[currentGoal][type]) {
+    if (!tipsData[currentGoal]?.[type]) {
       tipsBox.innerHTML = "No tips available";
       return;
     }
 
-    let html = `<h3>${type.toUpperCase()} TIPS</h3><ul>`;
+    let html = `<h3>${type.toUpperCase()}</h3><ul class="premium-list">`;
+
     tipsData[currentGoal][type].forEach(tip => {
-      html += `<li>${tip}</li>`;
+      html += `<li>✔ ${tip}</li>`;
     });
+
     html += "</ul>";
 
     tipsBox.innerHTML = html;
   });
 });
 
-// 🍽 Diet Plan (MODAL)
+// 🍽 Diet Plan Modal
 dietBtn.onclick = () => {
   if (!currentGoal || !extraData[currentGoal]) {
-    alert("⚠️ Select goal first");
+    showError("⚠️ Select goal first");
     return;
   }
 
-  let diet = extraData[currentGoal].diet;
-  let html = `<h3>🍽 Diet Plan</h3>`;
+  const diet = extraData[currentGoal].diet;
+
+  let html = `<h2>🍽 Diet Plan</h2>`;
 
   for (let meal in diet) {
-    html += `<strong>${meal}</strong><ul>`;
-    diet[meal].forEach(item => html += `<li>${item}</li>`);
-    html += "</ul>";
+    html += `
+      <div class="plan-card">
+        <h4>${meal}</h4>
+        <ul>
+          ${diet[meal].map(item => `<li>${item}</li>`).join("")}
+        </ul>
+      </div>
+    `;
   }
 
-  modalBody.innerHTML = html;
-  modal.style.display = "flex";
+  openModal(html);
 };
 
-// 🏋️ Workout Plan (MODAL)
+// 🏋️ Workout Modal
 workoutBtn.onclick = () => {
   if (!currentGoal || !extraData[currentGoal]) {
-    alert("⚠️ Select goal first");
+    showError("⚠️ Select goal first");
     return;
   }
 
-  let workout = extraData[currentGoal].workout;
-  let html = `<h3>🏋️ Weekly Workout Plan</h3><ul>`;
+  const workout = extraData[currentGoal].workout;
+
+  let html = `<h2>🏋️ Workout Plan</h2><ul>`;
 
   for (let day in workout) {
     html += `<li><strong>${day}:</strong> ${workout[day]}</li>`;
@@ -158,36 +228,48 @@ workoutBtn.onclick = () => {
 
   html += "</ul>";
 
-  modalBody.innerHTML = html;
-  modal.style.display = "flex";
+  openModal(html);
 };
+
+// 💡 Open Modal
+function openModal(content) {
+  modalBody.innerHTML = content;
+  modal.style.display = "flex";
+
+  modalBody.style.animation = "fadeIn 0.4s ease";
+}
 
 // ❌ Close Modal
 closeModal.onclick = () => modal.style.display = "none";
-window.onclick = (e) => {
+window.onclick = e => {
   if (e.target === modal) modal.style.display = "none";
 };
 
 // 🧹 Clear
 clearBtn.onclick = () => {
-  document.getElementById('weight').value = '';
-  document.getElementById('height').value = '';
-  document.getElementById('bmiResult').innerHTML = '';
-  document.getElementById('meterFill').style.width = "0%";
+  $('weight').value = '';
+  $('height').value = '';
+  $('bmiResult').innerHTML = '';
+  $('meterFill').style.width = "0%";
   tipsBox.innerHTML = "";
   tabs.style.display = "none";
-  document.getElementById('goalSection').style.display = "none";
+  $('goalSection').style.display = "none";
 
   if (chart) chart.destroy();
 };
 
 // 📥 Download
 downloadBtn.onclick = () => {
-  const text = document.getElementById('bmiResult').innerText;
-  if (!text) return alert("⚠️ Calculate first");
+  const text = $('bmiResult').innerText;
+
+  if (!text) {
+    showError("⚠️ Calculate first");
+    return;
+  }
 
   const blob = new Blob([text], { type: 'text/plain' });
   const link = document.createElement('a');
+
   link.download = 'BMI_Result.txt';
   link.href = URL.createObjectURL(blob);
   link.click();
