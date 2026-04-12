@@ -1,52 +1,58 @@
 const calculateBtn = document.getElementById('calculateBtn');
 const clearBtn = document.getElementById('clearBtn');
 const downloadBtn = document.getElementById('downloadBtn');
+const toggleBtn = document.getElementById('toggleMode');
 
 let chart;
 
-// CLICK EVENT (no auto now)
-calculateBtn.addEventListener('click', calculateBMI);
+// Dark Mode Toggle
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
 
-function calculateBMI() {
+// Calculate
+calculateBtn.addEventListener('click', () => {
   const weight = parseFloat(document.getElementById('weight').value);
-  const heightCm = parseFloat(document.getElementById('height').value);
-  const age = parseInt(document.getElementById('age').value);
-  const gender = document.querySelector('input[name="gender"]:checked').value;
+  const height = parseFloat(document.getElementById('height').value);
   const resultDiv = document.getElementById('bmiResult');
 
-  if (!weight || !heightCm) {
-    resultDiv.innerText = "⚠️ Enter weight & height";
+  if (!weight || !height) {
+    resultDiv.innerText = "⚠️ Enter values";
     return;
   }
 
-  const heightM = heightCm / 100;
-  const bmi = (weight / (heightM * heightM)).toFixed(2);
+  const bmi = (weight / ((height/100) ** 2)).toFixed(2);
 
-  let category = "", color = "green";
+  let category = "", suggestion = "";
 
   if (bmi < 18.5) {
-    category = "Underweight"; color = "#3498db";
+    category = "Underweight";
+    suggestion = "Eat more nutritious food.";
   } else if (bmi < 25) {
-    category = "Normal"; color = "#2ecc71";
+    category = "Normal";
+    suggestion = "Keep your lifestyle balanced.";
   } else if (bmi < 30) {
-    category = "Overweight"; color = "#f39c12";
+    category = "Overweight";
+    suggestion = "Exercise regularly.";
   } else {
-    category = "Obese"; color = "#e74c3c";
+    category = "Obese";
+    suggestion = "Consult a health expert.";
   }
 
   resultDiv.innerHTML = `
-    <strong>BMI:</strong> ${bmi} (${category})
+    <strong>BMI:</strong> ${bmi} (${category})<br>
+    🧠 ${suggestion}
   `;
 
-  // 🔥 BMI METER
+  // Meter animation
   const meter = document.getElementById("meterFill");
-  const percentage = Math.min((bmi / 40) * 100, 100);
-  meter.style.width = percentage + "%";
-  meter.style.background = color;
+  meter.style.width = "0%";
+  setTimeout(() => {
+    meter.style.width = Math.min((bmi / 40) * 100, 100) + "%";
+  }, 200);
 
-  // 🔥 GRAPH (Chart.js)
+  // Graph
   const ctx = document.getElementById('bmiChart').getContext('2d');
-
   if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
@@ -54,7 +60,6 @@ function calculateBMI() {
     data: {
       labels: ['Underweight', 'Normal', 'Overweight', 'Obese'],
       datasets: [{
-        label: 'BMI Level',
         data: [
           bmi < 18.5 ? bmi : 0,
           (bmi >= 18.5 && bmi < 25) ? bmi : 0,
@@ -64,29 +69,24 @@ function calculateBMI() {
       }]
     },
     options: {
-      scales: {
-        y: { beginAtZero: true }
-      }
+      plugins: { legend: { display: false } }
     }
   });
-}
+});
 
-// CLEAR
+// Clear
 clearBtn.addEventListener('click', () => {
   document.getElementById('weight').value = '';
   document.getElementById('height').value = '';
-  document.getElementById('age').value = '';
   document.getElementById('bmiResult').innerHTML = '';
   document.getElementById('meterFill').style.width = "0%";
-
   if (chart) chart.destroy();
 });
 
-// DOWNLOAD
+// Download
 downloadBtn.addEventListener('click', () => {
   const text = document.getElementById('bmiResult').innerText;
-
-  if (!text) return alert("⚠️ Calculate first");
+  if (!text) return alert("Calculate first");
 
   const blob = new Blob([text], { type: 'text/plain' });
   const link = document.createElement('a');
