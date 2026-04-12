@@ -30,9 +30,7 @@ fetch('dietWorkout.json').then(res => res.json()).then(data => extraData = data)
 // 🌙 Toggle Mode
 toggleBtn.onclick = () => {
   document.body.classList.toggle('dark');
-
-  toggleBtn.innerText =
-    document.body.classList.contains('dark') ? "🌙" : "☀️";
+  toggleBtn.innerText = document.body.classList.contains('dark') ? "🌙" : "☀️";
 };
 
 // 📊 Calculate
@@ -41,32 +39,24 @@ calculateBtn.onclick = () => {
   const height = parseFloat($('height').value);
 
   if (!weight || !height) {
-    $('bmiResult').innerText = "⚠️ Enter valid data";
+    $('bmiResult').innerText = "⚠️ Enter values";
     return;
   }
 
-  const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+  const bmi = (weight / ((height/100)**2)).toFixed(2);
 
-  let category = "";
-  if (bmi < 18.5) category = "Underweight";
-  else if (bmi < 25) category = "Normal";
-  else if (bmi < 30) category = "Overweight";
-  else category = "Obese";
+  let category = bmi < 18.5 ? "Underweight" :
+                 bmi < 25 ? "Normal" :
+                 bmi < 30 ? "Overweight" : "Obese";
 
   $('bmiResult').innerHTML = `<h2>${bmi}</h2><p>${category}</p>`;
 
-  // Show only goal section
   $('goalSection').style.display = "block";
   tabs.style.display = "none";
   document.querySelector('.extra-section').style.display = "none";
-  tipsBox.innerHTML = "";
 
   // Meter
-  const meter = $('meterFill');
-  meter.style.width = "0%";
-  setTimeout(() => {
-    meter.style.width = Math.min((bmi / 40) * 100, 100) + "%";
-  }, 200);
+  $('meterFill').style.width = Math.min((bmi/40)*100,100) + "%";
 
   // Chart
   const ctx = $('bmiChart').getContext('2d');
@@ -75,112 +65,113 @@ calculateBtn.onclick = () => {
   chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Under', 'Normal', 'Over', 'Obese'],
+      labels: ['Under','Normal','Over','Obese'],
       datasets: [{
         data: [
-          bmi < 18.5 ? bmi : 0,
-          (bmi >= 18.5 && bmi < 25) ? bmi : 0,
-          (bmi >= 25 && bmi < 30) ? bmi : 0,
-          bmi >= 30 ? bmi : 0
-        ],
-        borderRadius: 10
+          bmi<18.5?bmi:0,
+          bmi>=18.5&&bmi<25?bmi:0,
+          bmi>=25&&bmi<30?bmi:0,
+          bmi>=30?bmi:0
+        ]
       }]
     },
-    options: {
-      plugins: { legend: { display: false } },
-      scales: { y: { display: false } }
-    }
+    options: { plugins:{legend:{display:false}} }
   });
 };
 
 // 🎯 Goal
-function selectGoal(goal) {
+gainBtn.onclick = () => selectGoal('gain');
+loseBtn.onclick = () => selectGoal('lose');
+
+function selectGoal(goal){
   currentGoal = goal;
 
   tabs.style.display = "flex";
   document.querySelector('.extra-section').style.display = "block";
 
   tipsBox.innerHTML = "👉 Select a category";
-
-  gainBtn.classList.remove('active');
-  loseBtn.classList.remove('active');
-  goal === 'gain'
-    ? gainBtn.classList.add('active')
-    : loseBtn.classList.add('active');
 }
 
-gainBtn.onclick = () => selectGoal('gain');
-loseBtn.onclick = () => selectGoal('lose');
-
 // 📂 Tabs
-document.querySelectorAll('#categoryTabs button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#categoryTabs button').forEach(b => b.classList.remove('active'));
+document.querySelectorAll('#categoryTabs button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('#categoryTabs button').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
 
     const type = btn.dataset.type;
 
-    if (!tipsData[currentGoal]?.[type]) {
-      tipsBox.innerHTML = "No tips available";
+    if(!tipsData[currentGoal]?.[type]){
+      tipsBox.innerHTML="No tips";
       return;
     }
 
-    let html = "<ul>";
-    tipsData[currentGoal][type].forEach(t => html += `<li>✔ ${t}</li>`);
-    html += "</ul>";
+    let html="<ul>";
+    tipsData[currentGoal][type].forEach(t=> html+=`<li>${t}</li>`);
+    html+="</ul>";
 
-    tipsBox.innerHTML = html;
-  });
+    tipsBox.innerHTML=html;
+  };
 });
 
-// 🍽 Modal
-dietBtn.onclick = () => openPlan('diet');
-workoutBtn.onclick = () => openPlan('workout');
+// 🍽 Diet
+dietBtn.onclick = ()=>{
+  if(!currentGoal) return alert("Select goal");
 
-function openPlan(type) {
-  if (!currentGoal) return alert("Select goal first");
+  let d = extraData[currentGoal].diet;
+  let html="<h3>Diet Plan</h3>";
 
-  let data = extraData[currentGoal][type];
-  let html = `<h3>${type.toUpperCase()}</h3>`;
-
-  for (let key in data) {
-    html += `<strong>${key}</strong><ul>`;
-    data[key].forEach(item => html += `<li>${item}</li>`);
-    html += "</ul>";
+  for(let m in d){
+    html+=`<b>${m}</b><ul>`;
+    d[m].forEach(i=>html+=`<li>${i}</li>`);
+    html+="</ul>";
   }
 
-  modalBody.innerHTML = html;
-  modal.style.display = "flex";
-}
+  modalBody.innerHTML=html;
+  modal.style.display="flex";
+};
 
-// Close Modal
-closeModal.onclick = () => modal.style.display = "none";
-window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
+// 🏋️ Workout
+workoutBtn.onclick = ()=>{
+  if(!currentGoal) return alert("Select goal");
+
+  let w = extraData[currentGoal].workout;
+  let html="<h3>Workout Plan</h3><ul>";
+
+  for(let d in w){
+    html+=`<li>${d}: ${w[d]}</li>`;
+  }
+
+  html+="</ul>";
+
+  modalBody.innerHTML=html;
+  modal.style.display="flex";
+};
+
+// Close modal
+closeModal.onclick = ()=> modal.style.display="none";
 
 // Clear
-clearBtn.onclick = () => {
-  $('weight').value = '';
-  $('height').value = '';
-  $('bmiResult').innerHTML = '';
-  $('meterFill').style.width = "0%";
+clearBtn.onclick = ()=>{
+  $('weight').value='';
+  $('height').value='';
+  $('bmiResult').innerHTML='';
+  $('meterFill').style.width="0%";
+  tipsBox.innerHTML="";
+  tabs.style.display="none";
+  document.querySelector('.extra-section').style.display="none";
+  $('goalSection').style.display="none";
 
-  $('goalSection').style.display = "none";
-  tabs.style.display = "none";
-  document.querySelector('.extra-section').style.display = "none";
-
-  tipsBox.innerHTML = "";
-
-  if (chart) chart.destroy();
+  if(chart) chart.destroy();
 };
 
 // Download
-downloadBtn.onclick = () => {
-  const text = $('bmiResult').innerText;
-  if (!text) return alert("Calculate first");
+downloadBtn.onclick = ()=>{
+  let text = $('bmiResult').innerText;
+  if(!text) return alert("Calculate first");
 
-  const blob = new Blob([text], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.download = 'BMI_Result.txt';
-  link.href = URL.createObjectURL(blob);
-  link.click();
+  let blob = new Blob([text]);
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download="BMI.txt";
+  a.click();
 };
