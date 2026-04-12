@@ -8,20 +8,32 @@
 </head>
 <body>
 
-<div class="container">
-  <h1>Smart BMI Analyzer</h1>
+<div class="tool-wrapper">
+  <h2 class="tool-title">🧍 BMI Calculator</h2>
 
-  <select id="unit">
-    <option value="metric">Metric (cm, kg)</option>
-    <option value="imperial">Imperial (ft, lbs)</option>
-  </select>
+  <div class="converter-grid">
+    <input type="number" id="weight" placeholder="Weight (kg)">
+    <input type="number" id="height" placeholder="Height (cm)">
 
-  <input type="number" id="height" placeholder="Enter height">
-  <input type="number" id="weight" placeholder="Enter weight">
+    <div class="gender-selector">
+      <label><input type="radio" name="gender" value="male" checked> Male</label>
+      <label><input type="radio" name="gender" value="female"> Female</label>
+    </div>
 
-  <button onclick="calculateBMI()">Calculate BMI</button>
+    <button id="clearBtn">🧹 Clear</button>
+    <button id="downloadBtn">📥 Download</button>
+  </div>
 
-  <div id="result"></div>
+  <div id="bmiResult" class="output-box"></div>
+
+  <div class="how-to-use">
+    <h3>📘 How to Use</h3>
+    <ul>
+      <li>Enter your weight & height.</li>
+      <li>Result updates automatically.</li>
+      <li>Download or clear anytime.</li>
+    </ul>
+  </div>
 </div>
 
 <script src="script.js"></script>
