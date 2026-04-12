@@ -1,68 +1,92 @@
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #ff4d6d, #ff758f);
+  background: #f6f8fc;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.tool-wrapper {
+  background: linear-gradient(to bottom right, #ffffff, #fff4f9);
+  border-radius: 18px;
+  max-width: 650px;
+  margin: auto;
+  padding: 30px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.tool-title {
+  font-size: 28px;
+  text-align: center;
+  color: #e30b5c;
+  margin-bottom: 25px;
+}
+
+.converter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.converter-grid input,
+.converter-grid button {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.converter-grid input:focus {
+  outline: none;
+  border-color: #e30b5c;
+}
+
+.converter-grid button {
+  background: #e30b5c;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
+
+.converter-grid button:hover {
+  background: #c4084b;
+}
+
+.gender-selector {
+  grid-column: span 2;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
+  gap: 25px;
 }
 
-.container {
-  background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  width: 320px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-h1 {
-  margin-bottom: 20px;
-  color: #333;
-}
-
-input, select {
-  width: 90%;
-  padding: 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-}
-
-button {
-  width: 95%;
-  padding: 12px;
-  margin-top: 10px;
-  background: #ff4d6d;
-  color: white;
-  border: none;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  background: #e63950;
-}
-
-#result {
+.output-box {
   margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
   font-size: 18px;
-  font-weight: bold;
+  text-align: center;
 }
 
-.category {
-  margin-top: 10px;
-  padding: 8px;
-  border-radius: 6px;
-  color: white;
-  display: inline-block;
+.bmi-underweight { background: #fff5f5; color: #c0392b; }
+.bmi-normal { background: #f0fff4; color: #27ae60; }
+.bmi-overweight { background: #fffdf0; color: #f39c12; }
+.bmi-obese { background: #fff4f4; color: #e74c3c; }
+
+.how-to-use {
+  margin-top: 30px;
+  padding: 15px;
+  background: #fafafa;
+  border-radius: 12px;
+  border-left: 4px solid #e30b5c;
 }
 
-.underweight { background: #3498db; }
-.normal { background: #2ecc71; }
-.overweight { background: #f39c12; }
-.obese { background: #e74c3c; }
+@media (max-width: 600px) {
+  .converter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gender-selector {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
