@@ -1,4 +1,4 @@
-/* 🔥 Base Reset */
+/* 🔥 Reset */
 * {
   margin: 0;
   padding: 0;
@@ -13,55 +13,24 @@ body {
   min-height: 100vh;
 }
 
-/* 🌞 Light Mode */
-body.dark {
-  background: #f1f5f9;
-  color: #111;
-}
-
-body.dark .glass {
-  background: rgba(0,0,0,0.05);
-  border: 1px solid rgba(0,0,0,0.1);
-}
-
-body.dark input {
-  background: rgba(0,0,0,0.05);
-  color: #111;
-}
-
-body.dark .result-box,
-body.dark .tips-box {
-  background: rgba(0,0,0,0.05);
-}
-
-body.dark .mode-btn {
-  background: rgba(0,0,0,0.1);
-  color: #111;
-}
-
-/* 🌟 Top Bar */
+/* 🌟 Top */
 .top-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
   padding: 20px;
 }
 
-.logo span {
-  color: #6366f1;
-}
-
-/* 🌙 Toggle Button FIXED */
+/* 🌙 Toggle Button */
 .mode-btn {
   position: fixed;
   top: 15px;
   right: 15px;
+  z-index: 1000;
   background: rgba(255,255,255,0.1);
   border: none;
   padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
-  z-index: 1000;
 }
 
 /* 📦 Container */
@@ -71,13 +40,17 @@ body.dark .mode-btn {
   padding: 20px;
 }
 
-/* 💎 Glass */
+/* 💎 Card */
+.card {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 18px;
+}
+
 .glass {
   background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(15px);
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 20px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* 📥 Inputs */
@@ -110,15 +83,18 @@ button {
   cursor: pointer;
 }
 
-/* Button Styles */
-.primary-btn { background: #6366f1; }
-.secondary-btn { background: rgba(255,255,255,0.1); }
-.download-btn { background: #22c55e; }
+/* Button styles */
+.primary-btn {
+  background: #6366f1;
+}
 
-.goal.gain { background: #22c55e; }
-.goal.lose { background: #ef4444; }
+.secondary-btn {
+  background: rgba(255,255,255,0.1);
+}
 
-.ai-btn { background: #f59e0b; }
+.download-btn {
+  background: #22c55e;
+}
 
 /* 📊 Result */
 .result-box {
@@ -140,15 +116,31 @@ button {
 #meterFill {
   height: 100%;
   width: 0%;
-  transition: 0.5s;
   background: linear-gradient(to right,#3b82f6,#22c55e,#f59e0b,#ef4444);
+  transition: 0.5s;
 }
+
+/* 🎯 Goal */
+.goal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.goal {
+  background: #333;
+}
+
+.gain { background: #22c55e; }
+.lose { background: #ef4444; }
 
 /* 📚 Tabs */
 .tabs {
   display: none;
   gap: 10px;
-  margin-top: 10px;
+}
+
+.tab {
+  background: rgba(255,255,255,0.1);
 }
 
 .tab.active {
@@ -159,20 +151,27 @@ button {
 .tips-box {
   margin-top: 15px;
   padding: 15px;
-  border-radius: 12px;
   background: rgba(255,255,255,0.06);
+  border-radius: 10px;
 }
 
-/* 🎯 Sections HIDDEN INITIALLY */
-#goalSection,
+/* ⚡ Extra */
 .extra-section {
   display: none;
 }
 
-/* ⚡ Extra */
 .extra-buttons {
   display: flex;
   gap: 10px;
+}
+
+.ai-btn {
+  background: #f59e0b;
+}
+
+/* ❌ Hide initially */
+#goalSection {
+  display: none;
 }
 
 /* 💡 Modal */
@@ -187,15 +186,41 @@ button {
 }
 
 .modal-content {
-  width: 90%;
-  max-width: 500px;
+  background: #1e293b;
   padding: 20px;
-  border-radius: 18px;
+  border-radius: 15px;
+  width: 90%;
+}
+
+/* 🌞 Light Mode */
+body.dark {
+  background: #f1f5f9;
+  color: #111;
+}
+
+body.dark .glass {
+  background: rgba(0,0,0,0.05);
+}
+
+body.dark input {
+  background: rgba(0,0,0,0.05);
+  color: #111;
+}
+
+body.dark .result-box,
+body.dark .tips-box {
+  background: rgba(0,0,0,0.05);
 }
 
 /* 📱 Mobile */
-@media (max-width: 600px) {
-  .input-grid { grid-template-columns: 1fr; }
+@media(max-width:600px){
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+
   .action-buttons,
-  .extra-buttons { flex-direction: column; }
+  .goal-buttons,
+  .extra-buttons {
+    flex-direction: column;
+  }
 }
