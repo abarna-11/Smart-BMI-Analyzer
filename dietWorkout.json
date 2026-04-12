@@ -1,24 +1,80 @@
 {
   "gain": {
     "diet": {
-      "breakfast": ["Eggs", "Milk"],
-      "lunch": ["Rice", "Chicken"],
-      "dinner": ["Chapati"]
+      "Breakfast": [
+        "4 Eggs (boiled or omelette)",
+        "2 Bread slices with peanut butter",
+        "1 Glass milk or banana shake"
+      ],
+      "Mid-Morning Snack": [
+        "Handful of almonds or cashews",
+        "1 Banana"
+      ],
+      "Lunch": [
+        "1 Cup rice or 2 chapati",
+        "Chicken / Paneer curry",
+        "Vegetable side dish"
+      ],
+      "Evening Snack": [
+        "Peanut butter sandwich",
+        "Fruit juice or smoothie"
+      ],
+      "Dinner": [
+        "2 Chapati or rice",
+        "Dal + vegetables",
+        "Boiled eggs or paneer"
+      ],
+      "Before Bed": [
+        "1 Glass milk"
+      ]
     },
     "workout": {
-      "Monday": "Chest",
-      "Tuesday": "Back"
+      "Monday": "Chest + Triceps (Push-ups, Bench Press, Dips)",
+      "Tuesday": "Back + Biceps (Pull-ups, Dumbbell Rows)",
+      "Wednesday": "Rest or Light Cardio",
+      "Thursday": "Legs (Squats, Lunges, Deadlifts)",
+      "Friday": "Shoulders (Shoulder Press, Lateral Raises)",
+      "Saturday": "Full Body Workout",
+      "Sunday": "Rest"
     }
   },
+
   "lose": {
     "diet": {
-      "breakfast": ["Oats"],
-      "lunch": ["Brown Rice"],
-      "dinner": ["Salad"]
+      "Breakfast": [
+        "Oats with milk or water",
+        "Boiled eggs (2)",
+        "Green tea"
+      ],
+      "Mid-Morning Snack": [
+        "Apple or orange",
+        "Handful of nuts"
+      ],
+      "Lunch": [
+        "Brown rice or 2 chapati",
+        "Grilled chicken / paneer",
+        "Vegetables or salad"
+      ],
+      "Evening Snack": [
+        "Green tea",
+        "Roasted chana or light snack"
+      ],
+      "Dinner": [
+        "Vegetable salad",
+        "Soup or light protein meal"
+      ],
+      "Before Bed": [
+        "Warm water or herbal tea"
+      ]
     },
     "workout": {
-      "Monday": "Cardio",
-      "Tuesday": "HIIT"
+      "Monday": "Cardio (30 min walk or cycling)",
+      "Tuesday": "HIIT Workout",
+      "Wednesday": "Core + Abs",
+      "Thursday": "Cardio + Light Strength",
+      "Friday": "HIIT + Abs",
+      "Saturday": "Full Body Fat Burn",
+      "Sunday": "Rest or Walking"
     }
   }
 }
