@@ -14,28 +14,32 @@
   <div class="converter-grid">
     <input type="number" id="weight" placeholder="Weight (kg)">
     <input type="number" id="height" placeholder="Height (cm)">
+    <input type="number" id="age" placeholder="Age (optional)">
 
     <div class="gender-selector">
       <label><input type="radio" name="gender" value="male" checked> Male</label>
       <label><input type="radio" name="gender" value="female"> Female</label>
     </div>
 
+    <button id="calculateBtn">📊 Get Result</button>
     <button id="clearBtn">🧹 Clear</button>
     <button id="downloadBtn">📥 Download</button>
   </div>
 
+  <!-- RESULT -->
   <div id="bmiResult" class="output-box"></div>
 
-  <div class="how-to-use">
-    <h3>📘 How to Use</h3>
-    <ul>
-      <li>Enter your weight & height.</li>
-      <li>Result updates automatically.</li>
-      <li>Download or clear anytime.</li>
-    </ul>
+  <!-- BMI METER -->
+  <div class="meter">
+    <div id="meterFill"></div>
   </div>
+
+  <!-- GRAPH -->
+  <canvas id="bmiChart"></canvas>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
