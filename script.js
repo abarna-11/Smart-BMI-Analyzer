@@ -120,3 +120,11 @@ downloadBtn.onclick=()=>{
   link.href=URL.createObjectURL(blob);
   link.click();
 };
+
+// Active tab effect
+document.querySelectorAll('#categoryTabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#categoryTabs button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
