@@ -1,12 +1,51 @@
 {
   "gain": {
-    "diet": ["Eat more calories", "Protein intake"],
-    "workout": ["Strength training"],
-    "lifestyle": ["Sleep well"]
+    "diet": [
+      "Increase daily calorie intake with healthy foods",
+      "Eat protein-rich foods like eggs, chicken, paneer, and lentils",
+      "Include healthy fats like nuts, peanut butter, and ghee",
+      "Eat 5–6 small meals instead of 2–3 large meals",
+      "Drink milk, smoothies, or banana shakes daily",
+      "Add complex carbs like rice, oats, and whole wheat"
+    ],
+    "workout": [
+      "Focus on strength training (dumbbells, push-ups, squats)",
+      "Train 4–5 times per week with progressive overload",
+      "Avoid excessive cardio to prevent calorie loss",
+      "Increase weights gradually every week",
+      "Target major muscle groups (chest, legs, back)"
+    ],
+    "lifestyle": [
+      "Sleep at least 7–8 hours daily for muscle recovery",
+      "Stay consistent with meals and workouts",
+      "Avoid stress and maintain a positive mindset",
+      "Track your weight weekly",
+      "Drink enough water (2–3 liters daily)"
+    ]
   },
+
   "lose": {
-    "diet": ["Reduce sugar", "Eat vegetables"],
-    "workout": ["Cardio"],
-    "lifestyle": ["Drink water"]
+    "diet": [
+      "Reduce sugar and processed food intake",
+      "Eat more vegetables, fruits, and fiber-rich foods",
+      "Increase protein intake to stay full longer",
+      "Avoid late-night eating",
+      "Drink green tea or lemon water",
+      "Control portion sizes and avoid overeating"
+    ],
+    "workout": [
+      "Do cardio exercises (walking, running, cycling)",
+      "Add HIIT workouts for faster fat burning",
+      "Train at least 4–5 days per week",
+      "Combine strength training with cardio",
+      "Stay active throughout the day (not just workouts)"
+    ],
+    "lifestyle": [
+      "Drink 2–3 liters of water daily",
+      "Sleep 7–8 hours to regulate metabolism",
+      "Avoid stress eating and emotional eating",
+      "Maintain a consistent daily routine",
+      "Track your calories and progress"
+    ]
   }
 }
