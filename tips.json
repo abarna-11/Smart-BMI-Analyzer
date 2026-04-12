@@ -1,0 +1,12 @@
+{
+  "gain": {
+    "diet": ["Eat more calories", "Protein intake"],
+    "workout": ["Strength training"],
+    "lifestyle": ["Sleep well"]
+  },
+  "lose": {
+    "diet": ["Reduce sugar", "Eat vegetables"],
+    "workout": ["Cardio"],
+    "lifestyle": ["Drink water"]
+  }
+}
