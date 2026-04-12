@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Smart BMI Analyzer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,11 +26,32 @@
 
   <div id="bmiResult" class="output-box"></div>
 
-  <div class="meter">
-    <div id="meterFill"></div>
-  </div>
+  <div class="meter"><div id="meterFill"></div></div>
 
   <canvas id="bmiChart"></canvas>
+
+  <!-- Goal -->
+  <div id="goalSection" class="goal-section" style="display:none;">
+    <button id="gainBtn">💪 Gain Weight</button>
+    <button id="loseBtn">🔥 Lose Weight</button>
+  </div>
+
+  <!-- Tabs -->
+  <div id="categoryTabs" class="tabs" style="display:none;">
+    <button data-type="diet">🍗 Diet</button>
+    <button data-type="workout">🏋️ Workout</button>
+    <button data-type="lifestyle">😴 Lifestyle</button>
+  </div>
+
+  <div id="tipsBox" class="tips-box"></div>
+
+  <!-- Extra -->
+  <div class="extra-section" id="extraSection" style="display:none;">
+    <button id="dietBtn">🍽 Diet Plan</button>
+    <button id="workoutBtn">🏋️ Workout Plan</button>
+  </div>
+
+  <div id="extraOutput" class="tips-box"></div>
 
 </div>
 
