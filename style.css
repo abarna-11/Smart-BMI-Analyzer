@@ -1,4 +1,4 @@
-/* 🔥 Reset */
+/* 🔥 Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -13,24 +13,39 @@ body {
   min-height: 100vh;
 }
 
-/* 🌟 Top */
+/* 🌟 Top Bar */
 .top-bar {
   display: flex;
-  justify-content: center;
-  padding: 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
 }
 
-/* 🌙 Toggle Button */
+.logo h2 {
+  font-weight: 600;
+}
+
+.logo span {
+  color: #6366f1;
+}
+
+.subtitle {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
 .mode-btn {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 1000;
   background: rgba(255,255,255,0.1);
   border: none;
   padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
+  color: white;
+  transition: 0.3s;
+}
+
+.mode-btn:hover {
+  background: rgba(255,255,255,0.2);
 }
 
 /* 📦 Container */
@@ -40,7 +55,7 @@ body {
   padding: 20px;
 }
 
-/* 💎 Card */
+/* 💎 Glass Card */
 .card {
   margin-bottom: 20px;
   padding: 20px;
@@ -49,8 +64,9 @@ body {
 
 .glass {
   background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(15px);
   border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 /* 📥 Inputs */
@@ -60,12 +76,24 @@ body {
   gap: 15px;
 }
 
+.input-group label {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
 input {
+  width: 100%;
   padding: 12px;
+  margin-top: 5px;
   border-radius: 10px;
   border: none;
   background: rgba(255,255,255,0.08);
   color: white;
+  outline: none;
+}
+
+input:focus {
+  border: 1px solid #6366f1;
 }
 
 /* 🎯 Buttons */
@@ -81,19 +109,32 @@ button {
   border-radius: 12px;
   border: none;
   cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
 }
 
-/* Button styles */
+/* Primary */
 .primary-btn {
-  background: #6366f1;
+  background: linear-gradient(135deg,#6366f1,#4f46e5);
 }
 
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+}
+
+/* Secondary */
 .secondary-btn {
   background: rgba(255,255,255,0.1);
 }
 
+.secondary-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* Download */
 .download-btn {
-  background: #22c55e;
+  background: linear-gradient(135deg,#22c55e,#16a34a);
 }
 
 /* 📊 Result */
@@ -103,44 +144,65 @@ button {
   border-radius: 12px;
   background: rgba(255,255,255,0.08);
   text-align: center;
+  font-size: 16px;
 }
 
 /* 📈 Meter */
 .meter {
   margin-top: 20px;
   height: 12px;
-  background: #111;
   border-radius: 10px;
+  overflow: hidden;
+  background: #111827;
 }
 
 #meterFill {
   height: 100%;
   width: 0%;
+  transition: 0.6s ease;
   background: linear-gradient(to right,#3b82f6,#22c55e,#f59e0b,#ef4444);
-  transition: 0.5s;
 }
 
-/* 🎯 Goal */
+/* 📉 Chart */
+.chart-box {
+  margin-top: 20px;
+}
+
+/* 🎯 Goals */
+.goal-section h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .goal-buttons {
   display: flex;
   gap: 10px;
 }
 
 .goal {
-  background: #333;
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
 }
 
-.gain { background: #22c55e; }
-.lose { background: #ef4444; }
+.gain {
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+.lose {
+  background: linear-gradient(135deg,#ef4444,#dc2626);
+}
 
 /* 📚 Tabs */
 .tabs {
-  display: none;
+  display: flex;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .tab {
-  background: rgba(255,255,255,0.1);
+  flex: 1;
+  background: rgba(255,255,255,0.08);
 }
 
 .tab.active {
@@ -151,13 +213,15 @@ button {
 .tips-box {
   margin-top: 15px;
   padding: 15px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.06);
-  border-radius: 10px;
+  line-height: 1.6;
 }
 
 /* ⚡ Extra */
-.extra-section {
-  display: none;
+.extra-section h3 {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .extra-buttons {
@@ -166,18 +230,20 @@ button {
 }
 
 .ai-btn {
-  background: #f59e0b;
+  flex: 1;
+  background: linear-gradient(135deg,#f59e0b,#d97706);
 }
 
-/* ❌ Hide initially */
-#goalSection {
-  display: none;
+.ai-btn:hover {
+  transform: scale(1.05);
 }
 
 /* 💡 Modal */
 .modal {
   display: none;
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.7);
@@ -186,34 +252,25 @@ button {
 }
 
 .modal-content {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 15px;
   width: 90%;
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 18px;
 }
 
-/* 🌞 Light Mode */
-body.dark {
-  background: #f1f5f9;
-  color: #111;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-body.dark .glass {
-  background: rgba(0,0,0,0.05);
-}
-
-body.dark input {
-  background: rgba(0,0,0,0.05);
-  color: #111;
-}
-
-body.dark .result-box,
-body.dark .tips-box {
-  background: rgba(0,0,0,0.05);
+#closeModal {
+  cursor: pointer;
+  font-size: 20px;
 }
 
 /* 📱 Mobile */
-@media(max-width:600px){
+@media (max-width: 600px) {
   .input-grid {
     grid-template-columns: 1fr;
   }
