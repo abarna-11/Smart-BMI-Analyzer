@@ -1,80 +1,188 @@
 {
   "gain": {
     "diet": {
-      "Breakfast": [
-        "4 Eggs (boiled or omelette)",
-        "2 Bread slices with peanut butter",
-        "1 Glass milk or banana shake"
-      ],
-      "Mid-Morning Snack": [
-        "Handful of almonds or cashews",
-        "1 Banana"
-      ],
-      "Lunch": [
-        "1 Cup rice or 2 chapati",
-        "Chicken / Paneer curry",
-        "Vegetable side dish"
-      ],
-      "Evening Snack": [
-        "Peanut butter sandwich",
-        "Fruit juice or smoothie"
-      ],
-      "Dinner": [
-        "2 Chapati or rice",
-        "Dal + vegetables",
-        "Boiled eggs or paneer"
-      ],
-      "Before Bed": [
-        "1 Glass milk"
-      ]
+      "Breakfast": {
+        "items": [
+          "4 Eggs (boiled / omelette)",
+          "2 Bread slices with peanut butter",
+          "1 Glass milk / banana shake"
+        ],
+        "calories": "600-700 kcal",
+        "tip": "High protein + carbs to kickstart muscle growth 💪"
+      },
+      "Mid-Morning Snack": {
+        "items": [
+          "Handful of almonds or cashews",
+          "1 Banana"
+        ],
+        "calories": "250-300 kcal",
+        "tip": "Healthy fats + quick energy boost ⚡"
+      },
+      "Lunch": {
+        "items": [
+          "1 Cup rice / 2 chapati",
+          "Chicken or Paneer curry",
+          "Vegetable side dish"
+        ],
+        "calories": "700-800 kcal",
+        "tip": "Balanced meal for mass gain 🍗"
+      },
+      "Evening Snack": {
+        "items": [
+          "Peanut butter sandwich",
+          "Fruit smoothie"
+        ],
+        "calories": "400-500 kcal",
+        "tip": "Maintain calorie surplus 📈"
+      },
+      "Dinner": {
+        "items": [
+          "2 Chapati / rice",
+          "Dal + vegetables",
+          "Eggs / paneer"
+        ],
+        "calories": "600-700 kcal",
+        "tip": "Recovery + muscle repair 🛠"
+      },
+      "Before Bed": {
+        "items": [
+          "1 Glass milk"
+        ],
+        "calories": "150-200 kcal",
+        "tip": "Slow protein for overnight growth 🌙"
+      }
     },
     "workout": {
-      "Monday": "Chest + Triceps (Push-ups, Bench Press, Dips)",
-      "Tuesday": "Back + Biceps (Pull-ups, Dumbbell Rows)",
-      "Wednesday": "Rest or Light Cardio",
-      "Thursday": "Legs (Squats, Lunges, Deadlifts)",
-      "Friday": "Shoulders (Shoulder Press, Lateral Raises)",
-      "Saturday": "Full Body Workout",
-      "Sunday": "Rest"
+      "Monday": {
+        "plan": "Chest + Triceps",
+        "exercises": "Push-ups, Bench Press, Dips",
+        "duration": "60 min",
+        "intensity": "High"
+      },
+      "Tuesday": {
+        "plan": "Back + Biceps",
+        "exercises": "Pull-ups, Dumbbell Rows",
+        "duration": "60 min",
+        "intensity": "High"
+      },
+      "Wednesday": {
+        "plan": "Rest / Light Cardio",
+        "duration": "30 min",
+        "intensity": "Low"
+      },
+      "Thursday": {
+        "plan": "Legs",
+        "exercises": "Squats, Lunges, Deadlifts",
+        "duration": "60 min",
+        "intensity": "High"
+      },
+      "Friday": {
+        "plan": "Shoulders",
+        "exercises": "Shoulder Press, Lateral Raises",
+        "duration": "50 min",
+        "intensity": "Medium"
+      },
+      "Saturday": {
+        "plan": "Full Body Workout",
+        "duration": "60 min",
+        "intensity": "High"
+      },
+      "Sunday": {
+        "plan": "Rest",
+        "intensity": "Recovery"
+      }
     }
   },
 
   "lose": {
     "diet": {
-      "Breakfast": [
-        "Oats with milk or water",
-        "Boiled eggs (2)",
-        "Green tea"
-      ],
-      "Mid-Morning Snack": [
-        "Apple or orange",
-        "Handful of nuts"
-      ],
-      "Lunch": [
-        "Brown rice or 2 chapati",
-        "Grilled chicken / paneer",
-        "Vegetables or salad"
-      ],
-      "Evening Snack": [
-        "Green tea",
-        "Roasted chana or light snack"
-      ],
-      "Dinner": [
-        "Vegetable salad",
-        "Soup or light protein meal"
-      ],
-      "Before Bed": [
-        "Warm water or herbal tea"
-      ]
+      "Breakfast": {
+        "items": [
+          "Oats with milk/water",
+          "2 Boiled eggs",
+          "Green tea"
+        ],
+        "calories": "300-400 kcal",
+        "tip": "Low calorie + high fiber start 🥣"
+      },
+      "Mid-Morning Snack": {
+        "items": [
+          "Apple / orange",
+          "Handful of nuts"
+        ],
+        "calories": "150-200 kcal",
+        "tip": "Keeps hunger under control 🍎"
+      },
+      "Lunch": {
+        "items": [
+          "Brown rice / 2 chapati",
+          "Grilled chicken / paneer",
+          "Salad"
+        ],
+        "calories": "400-500 kcal",
+        "tip": "High protein, low fat 🍽"
+      },
+      "Evening Snack": {
+        "items": [
+          "Green tea",
+          "Roasted chana"
+        ],
+        "calories": "150 kcal",
+        "tip": "Avoid junk cravings 🚫"
+      },
+      "Dinner": {
+        "items": [
+          "Vegetable salad",
+          "Soup or light protein meal"
+        ],
+        "calories": "250-300 kcal",
+        "tip": "Light dinner for fat loss 🔥"
+      },
+      "Before Bed": {
+        "items": [
+          "Warm water / herbal tea"
+        ],
+        "calories": "0-50 kcal",
+        "tip": "Improves digestion 🌙"
+      }
     },
     "workout": {
-      "Monday": "Cardio (30 min walk or cycling)",
-      "Tuesday": "HIIT Workout",
-      "Wednesday": "Core + Abs",
-      "Thursday": "Cardio + Light Strength",
-      "Friday": "HIIT + Abs",
-      "Saturday": "Full Body Fat Burn",
-      "Sunday": "Rest or Walking"
+      "Monday": {
+        "plan": "Cardio",
+        "exercises": "Walking / Cycling",
+        "duration": "30 min",
+        "intensity": "Medium"
+      },
+      "Tuesday": {
+        "plan": "HIIT",
+        "duration": "20 min",
+        "intensity": "High"
+      },
+      "Wednesday": {
+        "plan": "Core + Abs",
+        "duration": "30 min",
+        "intensity": "Medium"
+      },
+      "Thursday": {
+        "plan": "Cardio + Strength",
+        "duration": "40 min",
+        "intensity": "Medium"
+      },
+      "Friday": {
+        "plan": "HIIT + Abs",
+        "duration": "25 min",
+        "intensity": "High"
+      },
+      "Saturday": {
+        "plan": "Full Body Fat Burn",
+        "duration": "45 min",
+        "intensity": "High"
+      },
+      "Sunday": {
+        "plan": "Rest / Walking",
+        "duration": "20 min",
+        "intensity": "Low"
+      }
     }
   }
 }
