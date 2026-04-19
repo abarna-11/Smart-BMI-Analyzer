@@ -19,6 +19,8 @@ const modal = $('modal');
 const modalBody = $('modalBody');
 const closeModal = $('closeModal');
 
+const loader = $('loader');
+
 // 📊 State
 let chart;
 let tipsData = {};
@@ -39,40 +41,56 @@ async function loadData() {
 }
 loadData();
 
-// 🌙 Dark Mode
+// 🌙 Dark Mode (FIXED + SAVED)
+if (localStorage.getItem("theme") === "light") {
+  document.body.classList.add("light");
+  toggleBtn.innerText = "☀️";
+}
+
 toggleBtn.onclick = () => {
-  document.body.classList.toggle('dark');
-  toggleBtn.innerText = document.body.classList.contains('dark') ? "☀️" : "🌙";
+  document.body.classList.toggle('light');
+
+  const isLight = document.body.classList.contains('light');
+  toggleBtn.innerText = isLight ? "☀️" : "🌙";
+
+  localStorage.setItem("theme", isLight ? "light" : "dark");
 };
 
 // 📊 BMI Calculation
 calculateBtn.onclick = () => {
   const weight = parseFloat($('weight').value);
   const height = parseFloat($('height').value);
-  const resultDiv = $('bmiResult');
 
   if (!weight || !height) {
     showError("⚠️ Enter valid weight & height");
     return;
   }
 
-  const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
-  const category = getCategory(bmi);
+  loader.classList.remove("hidden");
 
-  // 🎯 Result UI
-  resultDiv.innerHTML = `
-    <h2>${bmi}</h2>
-    <p>${category}</p>
-    <small>${getMessage(category)}</small>
-  `;
+  setTimeout(() => {
+    const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+    const category = getCategory(bmi);
 
-  // Show sections
-  $('goalSection').style.display = "block";
-  tabs.style.display = "none";
-  tipsBox.innerHTML = "";
+    $('bmiResult').classList.remove("hidden");
+    $('bmiResult').innerHTML = `
+      <h2>${bmi}</h2>
+      <p>${category}</p>
+      <small>${getMessage(category)}</small>
+    `;
 
-  animateMeter(bmi);
-  renderChart(bmi);
+    $('goalSection').classList.remove("hidden");
+    $('tipsSection').classList.remove("hidden");
+    $('aiSection').classList.remove("hidden");
+
+    tabs.style.display = "none";
+    tipsBox.innerHTML = `<p class="empty-state">Select a goal 👇</p>`;
+
+    animateMeter(bmi);
+    renderChart(bmi);
+
+    loader.classList.add("hidden");
+  }, 800); // smooth loading effect
 };
 
 // 📊 Category
@@ -83,26 +101,28 @@ function getCategory(bmi) {
   return "Obese";
 }
 
-// 💬 Smart Message
+// 💬 Message
 function getMessage(category) {
-  const messages = {
+  return {
     Underweight: "You need more nutrition 💪",
     Normal: "Perfect! Maintain your lifestyle 👌",
     Overweight: "Time to get active 🔥",
     Obese: "Focus on health seriously ❤️"
-  };
-  return messages[category];
+  }[category];
 }
 
 // 🚨 Error
 function showError(msg) {
   const resultDiv = $('bmiResult');
+  resultDiv.classList.remove("hidden");
   resultDiv.innerHTML = `<p style="color:#ef4444">${msg}</p>`;
 }
 
-// 📈 Meter Animation
+// 📈 Meter
 function animateMeter(bmi) {
   const meter = $('meterFill');
+  $('meterFill').parentElement.classList.remove("hidden");
+
   meter.style.width = "0%";
 
   setTimeout(() => {
@@ -112,6 +132,9 @@ function animateMeter(bmi) {
 
 // 📊 Chart
 function renderChart(bmi) {
+  const chartBox = document.querySelector('.chart-box');
+  chartBox.classList.remove("hidden");
+
   const ctx = $('bmiChart').getContext('2d');
   if (chart) chart.destroy();
 
@@ -126,26 +149,18 @@ function renderChart(bmi) {
           (bmi >= 25 && bmi < 30) ? bmi : 0,
           bmi >= 30 ? bmi : 0
         ],
-        borderRadius: 10
+        borderRadius: 12
       }]
     },
     options: {
-      animation: {
-        duration: 1000
-      },
-      plugins: {
-        legend: { display: false }
-      },
-      scales: {
-        y: {
-          display: false
-        }
-      }
+      animation: { duration: 1200 },
+      plugins: { legend: { display: false } },
+      scales: { y: { display: false } }
     }
   });
 }
 
-// 🎯 Goal Selection
+// 🎯 Goal
 gainBtn.onclick = () => selectGoal('gain');
 loseBtn.onclick = () => selectGoal('lose');
 
@@ -153,18 +168,18 @@ function selectGoal(goal) {
   currentGoal = goal;
 
   tabs.style.display = "flex";
-  tipsBox.innerHTML = "👉 Select a category";
+  tipsBox.innerHTML = "👉 Select category above";
 
-  // Highlight active button
-  gainBtn.classList.remove('active');
-  loseBtn.classList.remove('active');
-  goal === 'gain' ? gainBtn.classList.add('active') : loseBtn.classList.add('active');
+  gainBtn.classList.toggle('active', goal === 'gain');
+  loseBtn.classList.toggle('active', goal === 'lose');
 }
 
 // 📂 Tabs
 document.querySelectorAll('#categoryTabs button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#categoryTabs button').forEach(b => b.classList.remove('active'));
+  btn.onclick = () => {
+    document.querySelectorAll('#categoryTabs button')
+      .forEach(b => b.classList.remove('active'));
+
     btn.classList.add('active');
 
     const type = btn.dataset.type;
@@ -183,17 +198,15 @@ document.querySelectorAll('#categoryTabs button').forEach(btn => {
     html += "</ul>";
 
     tipsBox.innerHTML = html;
-  });
+  };
 });
 
-// 🍽 Diet Plan Modal
+// 🍽 Diet Modal
 dietBtn.onclick = () => {
-  if (!currentGoal || !extraData[currentGoal]) {
-    showError("⚠️ Select goal first");
-    return;
-  }
+  if (!currentGoal) return showError("⚠️ Select goal first");
 
-  const diet = extraData[currentGoal].diet;
+  const diet = extraData[currentGoal]?.diet;
+  if (!diet) return;
 
   let html = `<h2>🍽 Diet Plan</h2>`;
 
@@ -201,9 +214,7 @@ dietBtn.onclick = () => {
     html += `
       <div class="plan-card">
         <h4>${meal}</h4>
-        <ul>
-          ${diet[meal].map(item => `<li>${item}</li>`).join("")}
-        </ul>
+        <ul>${diet[meal].map(i => `<li>${i}</li>`).join("")}</ul>
       </div>
     `;
   }
@@ -213,12 +224,10 @@ dietBtn.onclick = () => {
 
 // 🏋️ Workout Modal
 workoutBtn.onclick = () => {
-  if (!currentGoal || !extraData[currentGoal]) {
-    showError("⚠️ Select goal first");
-    return;
-  }
+  if (!currentGoal) return showError("⚠️ Select goal first");
 
-  const workout = extraData[currentGoal].workout;
+  const workout = extraData[currentGoal]?.workout;
+  if (!workout) return;
 
   let html = `<h2>🏋️ Workout Plan</h2><ul>`;
 
@@ -231,29 +240,38 @@ workoutBtn.onclick = () => {
   openModal(html);
 };
 
-// 💡 Open Modal
+// 💡 Modal (FIXED ANIMATION)
 function openModal(content) {
   modalBody.innerHTML = content;
-  modal.style.display = "flex";
-
-  modalBody.style.animation = "fadeIn 0.4s ease";
+  modal.classList.add("show");
 }
 
 // ❌ Close Modal
-closeModal.onclick = () => modal.style.display = "none";
+closeModal.onclick = () => modal.classList.remove("show");
 window.onclick = e => {
-  if (e.target === modal) modal.style.display = "none";
+  if (e.target === modal) modal.classList.remove("show");
 };
 
 // 🧹 Clear
 clearBtn.onclick = () => {
   $('weight').value = '';
   $('height').value = '';
+
   $('bmiResult').innerHTML = '';
+  $('bmiResult').classList.add("hidden");
+
   $('meterFill').style.width = "0%";
-  tipsBox.innerHTML = "";
+  document.querySelector('.meter').classList.add("hidden");
+  document.querySelector('.chart-box').classList.add("hidden");
+
+  $('goalSection').classList.add("hidden");
+  $('tipsSection').classList.add("hidden");
+  $('aiSection').classList.add("hidden");
+
   tabs.style.display = "none";
-  $('goalSection').style.display = "none";
+  tipsBox.innerHTML = "";
+
+  currentGoal = "";
 
   if (chart) chart.destroy();
 };
@@ -262,10 +280,7 @@ clearBtn.onclick = () => {
 downloadBtn.onclick = () => {
   const text = $('bmiResult').innerText;
 
-  if (!text) {
-    showError("⚠️ Calculate first");
-    return;
-  }
+  if (!text) return showError("⚠️ Calculate first");
 
   const blob = new Blob([text], { type: 'text/plain' });
   const link = document.createElement('a');
