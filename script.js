@@ -1,6 +1,7 @@
-// 🔥 Elements
+// 🔥 Helper
 const $ = id => document.getElementById(id);
 
+// 🔥 Elements
 const calculateBtn = $('calculateBtn');
 const clearBtn = $('clearBtn');
 const downloadBtn = $('downloadBtn');
@@ -41,7 +42,7 @@ async function loadData() {
 }
 loadData();
 
-// 🌙 Dark Mode (FIXED + SAVED)
+// 🌙 Dark Mode (FIXED + SAVE)
 if (localStorage.getItem("theme") === "light") {
   document.body.classList.add("light");
   toggleBtn.innerText = "☀️";
@@ -72,25 +73,28 @@ calculateBtn.onclick = () => {
     const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
     const category = getCategory(bmi);
 
-    $('bmiResult').classList.remove("hidden");
-    $('bmiResult').innerHTML = `
+    const resultDiv = $('bmiResult');
+    resultDiv.classList.remove("hidden");
+
+    resultDiv.innerHTML = `
       <h2>${bmi}</h2>
       <p>${category}</p>
       <small>${getMessage(category)}</small>
     `;
 
+    // Show sections
     $('goalSection').classList.remove("hidden");
     $('tipsSection').classList.remove("hidden");
     $('aiSection').classList.remove("hidden");
 
     tabs.style.display = "none";
-    tipsBox.innerHTML = `<p class="empty-state">Select a goal 👇</p>`;
+    tipsBox.innerHTML = `<p class="empty-state">Select your goal 👇</p>`;
 
     animateMeter(bmi);
     renderChart(bmi);
 
     loader.classList.add("hidden");
-  }, 800); // smooth loading effect
+  }, 700);
 };
 
 // 📊 Category
@@ -121,7 +125,7 @@ function showError(msg) {
 // 📈 Meter
 function animateMeter(bmi) {
   const meter = $('meterFill');
-  $('meterFill').parentElement.classList.remove("hidden");
+  meter.parentElement.classList.remove("hidden");
 
   meter.style.width = "0%";
 
@@ -160,7 +164,7 @@ function renderChart(bmi) {
   });
 }
 
-// 🎯 Goal
+// 🎯 Goal Selection
 gainBtn.onclick = () => selectGoal('gain');
 loseBtn.onclick = () => selectGoal('lose');
 
@@ -174,7 +178,7 @@ function selectGoal(goal) {
   loseBtn.classList.toggle('active', goal === 'lose');
 }
 
-// 📂 Tabs
+// 📂 Tabs (UPDATED FOR PREMIUM JSON)
 document.querySelectorAll('#categoryTabs button').forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll('#categoryTabs button')
@@ -183,16 +187,21 @@ document.querySelectorAll('#categoryTabs button').forEach(btn => {
     btn.classList.add('active');
 
     const type = btn.dataset.type;
+    const data = tipsData[currentGoal]?.[type];
 
-    if (!tipsData[currentGoal]?.[type]) {
+    if (!data) {
       tipsBox.innerHTML = "No tips available";
       return;
     }
 
-    let html = `<h3>${type.toUpperCase()}</h3><ul class="premium-list">`;
+    let html = `
+      <h3>${data.title}</h3>
+      <p class="tips-desc">${data.description}</p>
+      <ul class="premium-list">
+    `;
 
-    tipsData[currentGoal][type].forEach(tip => {
-      html += `<li>✔ ${tip}</li>`;
+    data.tips.forEach(tip => {
+      html += `<li>${tip.icon} ${tip.text}</li>`;
     });
 
     html += "</ul>";
@@ -201,7 +210,7 @@ document.querySelectorAll('#categoryTabs button').forEach(btn => {
   };
 });
 
-// 🍽 Diet Modal
+// 🍽 Diet Modal (UPDATED)
 dietBtn.onclick = () => {
   if (!currentGoal) return showError("⚠️ Select goal first");
 
@@ -211,10 +220,16 @@ dietBtn.onclick = () => {
   let html = `<h2>🍽 Diet Plan</h2>`;
 
   for (let meal in diet) {
+    const mealData = diet[meal];
+
     html += `
       <div class="plan-card">
         <h4>${meal}</h4>
-        <ul>${diet[meal].map(i => `<li>${i}</li>`).join("")}</ul>
+        <p class="calories">${mealData.calories}</p>
+        <ul>
+          ${mealData.items.map(i => `<li>${i}</li>`).join("")}
+        </ul>
+        <small>${mealData.tip}</small>
       </div>
     `;
   }
@@ -222,25 +237,32 @@ dietBtn.onclick = () => {
   openModal(html);
 };
 
-// 🏋️ Workout Modal
+// 🏋️ Workout Modal (UPDATED)
 workoutBtn.onclick = () => {
   if (!currentGoal) return showError("⚠️ Select goal first");
 
   const workout = extraData[currentGoal]?.workout;
   if (!workout) return;
 
-  let html = `<h2>🏋️ Workout Plan</h2><ul>`;
+  let html = `<h2>🏋️ Workout Plan</h2>`;
 
   for (let day in workout) {
-    html += `<li><strong>${day}:</strong> ${workout[day]}</li>`;
-  }
+    const w = workout[day];
 
-  html += "</ul>";
+    html += `
+      <div class="plan-card">
+        <h4>${day}</h4>
+        <p><strong>${w.plan || ""}</strong></p>
+        <p>${w.exercises || ""}</p>
+        <small>⏱ ${w.duration || ""} | 🔥 ${w.intensity || ""}</small>
+      </div>
+    `;
+  }
 
   openModal(html);
 };
 
-// 💡 Modal (FIXED ANIMATION)
+// 💡 Modal
 function openModal(content) {
   modalBody.innerHTML = content;
   modal.classList.add("show");
