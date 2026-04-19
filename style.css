@@ -28,12 +28,13 @@ body {
   transition: 0.4s;
 }
 
-/* 🌙 FLOATING TOGGLE */
+/* 🌙 TOGGLE (HEADER FIXED) */
 .mode-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
+  position: relative; /* changed */
+
+  top: 0;   /* optional cleanup */
+  right: 0; /* optional cleanup */
+  z-index: auto;
 
   background: var(--card);
   backdrop-filter: blur(12px);
