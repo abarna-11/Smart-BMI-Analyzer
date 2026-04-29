@@ -2,133 +2,752 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Smart BMI Analyzer Pro</title>
+  <title>BMI Analyzer Pro - Ultimate Health Suite 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional BMI Calculator with AI-powered health recommendations, real-time APIs, and premium features">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- html2pdf for PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    /* ============================================
+       PREMIUM CSS - BMI ANALYZER PRO
+       ============================================ */
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      --bg-secondary: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.07);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --accent: #6366f1;
+      --accent-dark: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.4);
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --purple: #8b5cf6;
+      --pink: #ec4899;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.light {
+      --bg-primary: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      --bg-secondary: #f1f5f9;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+    }
+
+    body {
+      font-family: 'Poppins', 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: var(--transition);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-dark);
+    }
+
+    /* Header */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .logo span {
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      opacity: 0.7;
+      letter-spacing: 1px;
+    }
+
+    .top-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: var(--transition);
+      color: var(--text-primary);
+    }
+
+    .icon-btn:hover {
+      background: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* Cards */
+    .card {
+      margin-bottom: 24px;
+      padding: 28px;
+      border-radius: 28px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      transition: var(--transition);
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Input Grid */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: block;
+      color: var(--text-secondary);
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 40px 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: 16px;
+      transition: var(--transition);
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .voice-btn {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 5px;
+      border-radius: 8px;
+      transition: var(--transition);
+      color: var(--text-secondary);
+    }
+
+    .voice-btn:hover {
+      color: var(--accent);
+      transform: scale(1.1);
+    }
+
+    /* Button Styles */
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: white;
+      box-shadow: 0 4px 15px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, var(--success), #16a34a);
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+    }
+
+    /* Result Box */
+    .result-box {
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.05));
+      text-align: center;
+      animation: slideDown 0.5s ease;
+    }
+
+    .result-box h2 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Meter */
+    .meter-container {
+      margin-top: 24px;
+    }
+
+    .meter {
+      height: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    #meterFill {
+      height: 100%;
+      width: 0%;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      background: linear-gradient(90deg, var(--info), var(--success), var(--warning), var(--danger));
+    }
+
+    /* Chart */
+    .chart-box {
+      margin-top: 24px;
+    }
+
+    /* Goal Buttons */
+    .goal-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .goal {
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .goal-gain {
+      background: linear-gradient(135deg, var(--success), #16a34a);
+    }
+
+    .goal-lose {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+    }
+
+    .goal.active {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 2px white, 0 0 0 4px var(--accent);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: var(--transition);
+    }
+
+    .tab.active {
+      background: var(--accent);
+    }
+
+    /* Tips Box */
+    .tips-box {
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.05);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .premium-list {
+      list-style: none;
+      margin-top: 12px;
+    }
+
+    .premium-list li {
+      padding: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Grid Buttons */
+    .grid-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .feature-btn {
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: var(--transition);
+      color: white;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 16px;
+      z-index: 1000;
+      animation: slideInRight 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      font-weight: 500;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      max-width: 600px;
+      width: 90%;
+      max-height: 85vh;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      overflow: hidden;
+      animation: scaleUp 0.3s ease;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header span {
+      font-size: 32px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-header span:hover {
+      transform: rotate(90deg);
+      color: var(--accent);
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      max-height: calc(85vh - 70px);
+    }
+
+    /* Plan Cards */
+    .plan-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+    }
+
+    .plan-card h4 {
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    /* Profile Dropdown */
+    .profile-dropdown {
+      display: none;
+      position: absolute;
+      top: 80px;
+      right: 24px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 20px;
+      min-width: 260px;
+      z-index: 200;
+      border: 1px solid var(--card-border);
+    }
+
+    .profile-dropdown.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .profile-dropdown input, .profile-dropdown select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+    }
+
+    /* History */
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    /* Loader */
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleUp {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .top-bar {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+      }
+      
+      .container {
+        padding: 16px;
+      }
+      
+      .card {
+        padding: 20px;
+      }
+      
+      .input-grid, .action-buttons, .goal-buttons {
+        flex-direction: column;
+        grid-template-columns: 1fr;
+      }
+      
+      .grid-buttons {
+        grid-template-columns: 1fr;
+      }
+      
+      .tabs {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- 🔥 Top Navigation -->
 <header class="top-bar">
   <div class="logo">
-    <h2>🧍 BMI Analyzer <span>Pro</span></h2>
-    <p class="subtitle">Smart Health Insights</p>
+    <h2>🧬 BMI Analyzer <span>Pro 2025</span></h2>
+    <p class="subtitle">AI-Powered Health Intelligence Platform</p>
   </div>
-
-  <button id="toggleMode" class="mode-btn">🌙</button>
+  <div class="top-controls">
+    <button id="historyBtn" class="icon-btn" title="BMI History">📊</button>
+    <button id="profileBtn" class="icon-btn" title="User Profile">👤</button>
+    <button id="toggleMode" class="icon-btn" title="Theme">🌙</button>
+  </div>
 </header>
 
-<!-- 🚀 Main Container -->
+<div id="profileDropdown" class="profile-dropdown">
+  <h4 style="margin-bottom: 15px;">👤 Your Profile</h4>
+  <input type="text" id="userName" placeholder="Your Name">
+  <input type="number" id="userAge" placeholder="Age">
+  <select id="userGender">
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+    <option value="Other">Other</option>
+  </select>
+  <button id="saveProfileBtn" class="btn btn-primary" style="margin-bottom: 8px;">💾 Save Profile</button>
+  <button id="loadProfileBtn" class="btn btn-secondary">📂 Load Profile</button>
+</div>
+
 <main class="container">
-
-  <!-- 💎 Main Card -->
-  <section class="card glass main-card">
-
-    <!-- 📥 Input Section -->
+  <!-- Main BMI Card -->
+  <section class="card">
     <div class="input-grid">
       <div class="input-group">
-        <label>Weight (kg)</label>
-        <input type="number" id="weight" placeholder="e.g. 70">
+        <label><i class="fas fa-weight-scale"></i> Weight (kg)</label>
+        <input type="number" id="weight" placeholder="e.g., 70" step="0.1">
+        <button class="voice-btn" data-field="weight">🎤</button>
       </div>
-
       <div class="input-group">
-        <label>Height (cm)</label>
-        <input type="number" id="height" placeholder="e.g. 170">
+        <label><i class="fas fa-ruler"></i> Height (cm)</label>
+        <input type="number" id="height" placeholder="e.g., 170" step="0.1">
+        <button class="voice-btn" data-field="height">🎤</button>
       </div>
     </div>
 
-    <!-- 🎯 Action Buttons -->
     <div class="action-buttons">
-      <button id="calculateBtn" class="primary-btn">📊 Calculate</button>
-      <button id="clearBtn" class="secondary-btn">🧹 Clear</button>
-      <button id="downloadBtn" class="download-btn">📥 Download</button>
+      <button id="calculateBtn" class="btn btn-primary">📊 Calculate BMI</button>
+      <button id="clearBtn" class="btn btn-secondary">🧹 Clear All</button>
+      <button id="downloadBtn" class="btn btn-success">📥 Export PDF</button>
     </div>
 
-    <!-- ⏳ Loader -->
     <div id="loader" class="loader hidden"></div>
-
-    <!-- 📊 Result -->
     <div id="bmiResult" class="result-box hidden"></div>
-
-    <!-- 📈 Meter -->
-    <div class="meter hidden">
-      <div id="meterFill"></div>
+    
+    <div class="meter-container hidden">
+      <div class="meter">
+        <div id="meterFill"></div>
+      </div>
     </div>
 
-    <!-- 📉 Chart -->
     <div class="chart-box hidden">
       <canvas id="bmiChart"></canvas>
     </div>
 
-  </section>
-
-  <!-- 🎯 Goal Section (Initially Hidden) -->
-  <section id="goalSection" class="card glass goal-section hidden">
-    <h3>Select Your Goal</h3>
-
-    <div class="goal-buttons">
-      <button id="gainBtn" class="goal gain">💪 Gain Weight</button>
-      <button id="loseBtn" class="goal lose">🔥 Lose Weight</button>
+    <div class="share-buttons hidden" style="display: flex; gap: 10px; margin-top: 20px;">
+      <button id="whatsappShare" class="btn" style="background:#25D366;">📱 WhatsApp</button>
+      <button id="emailShare" class="btn" style="background:#EA4335;">📧 Email</button>
+      <button id="copyResult" class="btn btn-primary">📋 Copy</button>
     </div>
   </section>
 
-  <!-- 📚 Tips Section -->
-  <section id="tipsSection" class="card glass hidden">
+  <!-- Goal Section -->
+  <section id="goalSection" class="card hidden">
+    <h3>🎯 Select Your Health Goal</h3>
+    <div class="goal-buttons">
+      <button id="gainBtn" class="goal goal-gain">💪 Gain Muscle Mass</button>
+      <button id="loseBtn" class="goal goal-lose">🔥 Lose Body Fat</button>
+    </div>
+  </section>
 
-    <h3>Personalized Tips</h3>
-
-    <!-- Tabs -->
-    <div id="categoryTabs" class="tabs">
-      <button data-type="diet" class="tab active">🍗 Diet</button>
+  <!-- Tips Section -->
+  <section id="tipsSection" class="card hidden">
+    <h3>💡 AI Personalized Recommendations</h3>
+    <div class="tabs">
+      <button data-type="diet" class="tab active">🍗 Diet Plan</button>
       <button data-type="workout" class="tab">🏋️ Workout</button>
       <button data-type="lifestyle" class="tab">😴 Lifestyle</button>
     </div>
-
-    <!-- Tips Content -->
     <div id="tipsBox" class="tips-box">
-      <p class="empty-state">Select a goal to see tips 👆</p>
-    </div>
-
-  </section>
-
-  <!-- ⚡ AI Plans -->
-  <section id="aiSection" class="card glass extra-section hidden">
-    <h3>AI Plans</h3>
-
-    <div class="extra-buttons">
-      <button id="dietBtn" class="ai-btn">🍽 Generate Diet Plan</button>
-      <button id="workoutBtn" class="ai-btn">🏋️ Generate Workout Plan</button>
+      <p>Select your goal to see personalized tips 👆</p>
     </div>
   </section>
 
+  <!-- Premium Features Grid -->
+  <section id="aiSection" class="card hidden">
+    <h3>⚡ Premium Health Tools</h3>
+    <div class="grid-buttons">
+      <button id="dietBtn" class="feature-btn" style="background: linear-gradient(135deg,#22c55e,#16a34a);">🍽️ Diet Plan</button>
+      <button id="workoutBtn" class="feature-btn" style="background: linear-gradient(135deg,#ef4444,#dc2626);">🏋️ Workout</button>
+      <button id="calorieBtn" class="feature-btn" style="background: linear-gradient(135deg,#8b5cf6,#6d28d9);">🔥 Calories</button>
+      <button id="waterBtn" class="feature-btn" style="background: linear-gradient(135deg,#3b82f6,#2563eb);">💧 Water Intake</button>
+      <button id="sleepBtn" class="feature-btn" style="background: linear-gradient(135deg,#f59e0b,#d97706);">😴 Sleep Guide</button>
+      <button id="macroBtn" class="feature-btn" style="background: linear-gradient(135deg,#10b981,#059669);">🥗 Macro Split</button>
+      <button id="nutritionBtn" class="feature-btn" style="background: linear-gradient(135deg,#ec4899,#db2777);">🔍 Food Lookup</button>
+      <button id="exerciseBtn" class="feature-btn" style="background: linear-gradient(135deg,#06b6d4,#0891b2);">💪 Exercise DB</button>
+      <button id="newsBtn" class="feature-btn" style="background: linear-gradient(135deg,#6366f1,#4f46e5);">📰 Health News</button>
+      <button id="quoteBtn" class="feature-btn" style="background: linear-gradient(135deg,#f97316,#ea580c);">✨ Daily Quote</button>
+    </div>
+  </section>
+
+  <!-- History Section -->
+  <section id="historySection" class="card hidden">
+    <h3>📊 BMI Progress History</h3>
+    <canvas id="historyChart" style="max-height: 220px; margin: 20px 0;"></canvas>
+    <div id="historyList"></div>
+    <button id="clearHistoryBtn" class="btn btn-secondary" style="margin-top: 15px;">🗑️ Clear History</button>
+  </section>
 </main>
 
-<!-- 💡 Premium Modal -->
+<!-- Modal -->
 <div id="modal" class="modal">
-  <div class="modal-content glass">
-
+  <div class="modal-content">
     <div class="modal-header">
       <h3 id="modalTitle">Smart Plan</h3>
       <span id="closeModal">&times;</span>
     </div>
-
-    <!-- ⏳ Modal Loader -->
     <div id="modalLoader" class="loader hidden"></div>
-
     <div id="modalBody" class="modal-body"></div>
-
   </div>
 </div>
 
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
-
 </body>
 </html>
