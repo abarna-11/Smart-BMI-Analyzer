@@ -44,10 +44,10 @@ let bmiHistory = [];
 // API CONFIGURATION (Get free keys from these services)
 // ============================================
 const API_KEYS = {
-  weather: "YOUR_OPENWEATHER_API_KEY",      // Get from: openweathermap.org
-  nutrition: "YOUR_CALORIENINJAS_KEY",      // Get from: calorieninjas.com
-  exercises: "YOUR_API_NINJAS_KEY",         // Get from: api-ninjas.com
-  news: "YOUR_GNEWS_API_KEY"                // Get from: gnews.io
+  weather: "3296cfeb3a797de075289485b245f880",      // Get from: openweathermap.org
+  nutrition: "iC55LBbsCkZx88APO3EtR1sDH80z0GzgLL8kejn7",      // Get from: calorieninjas.com
+  exercises: "iC55LBbsCkZx88APO3EtR1sDH80z0GzgLL8kejn7",         // Get from: api-ninjas.com
+  news: "fc0e76a8b8cdb73a64388fb8aaf7aa30"                // Get from: gnews.io
 };
 
 // ============================================
